@@ -1,0 +1,19 @@
+local_costmap:
+  dwa:                  true
+  sim_time:             4.0                 #2 < x < 4
+  vx_sample:            20
+  vth_sample:           40
+  sim_granularity:      0.025
+  path_distance_bias:   60.0                #how well it stucks to global path
+  goal_distance_bias:   20.0
+  occdist_scale:        0.02
+
+  global_frame:         odom
+  robot_base_frame:     base_link
+  update_frequency:     5.0
+  publish_frequency:    2.0
+  static_map:           false
+  rolling_window:       true
+  width:                6.0
+  height:               6.0
+  resolution:           0.05

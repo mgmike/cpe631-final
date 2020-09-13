@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: cpe631_final_with_nav
+Description: Description of cpe631_final_with_nav
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

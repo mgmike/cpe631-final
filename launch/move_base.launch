@@ -1,0 +1,28 @@
+<launch>
+
+    <master auto="start"/>
+
+<!--CODE TO START MAPPING USING GMAPPING FROM THE LASER SCANNER
+    <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" args="scan:=/laser/scan">
+            <param name="delta" type="double" value="0.05"/>
+    </node>
+    -->
+ <!-- Run the map server  -->
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find cpe631_final_with_nav)/src/altorfer_map.yaml"/>
+
+
+ <!--- Run AMCL
+    <include file="$(find amcl)/examples/amcl_omni.launch" />
+
+    <node pkg="amcl" type="amcl" name="amcl" output="screen" scan="laser/scan" />
+-->
+
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <rosparam file="$(find cpe631_final_with_nav)/src/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find cpe631_final_with_nav)/src/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find cpe631_final_with_nav)/src/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find cpe631_final_with_nav)/src/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find cpe631_final_with_nav)/src/base_local_planner_params.yaml" command="load" />
+    </node>
+
+</launch>

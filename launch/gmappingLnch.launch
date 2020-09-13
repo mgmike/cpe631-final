@@ -1,0 +1,43 @@
+<launch>
+    <param name="use_sim_time" value="true" />
+    <arg name="use_my_transform" default="false"/>
+    <arg name="use_pioneer" default="true"/>
+    <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+    <arg name="x_pos" default="1.0"/>
+    <arg name="y_pos" default="-3.0"/>
+    <arg name="z_pos" default="0.0"/>
+
+
+
+<!--TURTLEBOT3 SIMULATION IN GAZIBO-->
+    <group unless="$(arg use_pioneer)" >
+        <include file="$(find gazebo_ros)/launch/empty_world.launch" unless="$(arg use_pioneer)">
+            <arg name="world_name" value="$(find pedsim_simulator)/worlds/altorfer_v2_turtlebot.world"/>
+            <arg name="paused" value="false"/>
+            <arg name="use_sim_time" value="true"/>
+            <arg name="gui" value="true"/>
+            <arg name="headless" value="false"/>
+            <arg name="debug" value="false"/>
+        </include>
+
+        <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+        <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model turtlebot3_$(arg model) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" unless="$(arg use_pioneer)"/>
+    </group>
+
+	<!--ROBOT SIMULATION OF THE ALTORFER ROOM USING THE PIONEER BOT other file is Altorfer_f1_cpy.launch-->
+	<group if="$(arg use_pioneer)">
+        <include file="$(find pedsim_simulator)/launch/Altorfer_f1.launch" unless="$(arg use_my_transform)" />
+        <include file="$(find pedsim_simulator)/launch/Altorfer_f1_cpy.launch" if="$(arg use_my_transform)" />
+
+        <node pkg="cpe631_final_with_nav" type="tf_broadcaster" name="tf_broadcaster" if="$(arg use_my_transform)"/>
+        <node pkg="cpe631_final_with_nav" type="tf_listener" name="tf_listener" if="$(arg use_my_transform)"/>
+
+        <!-- TELEOP CODE TO CONTROL THE ROBOT USING cmd_vel
+        <node pkg="cpe631_final" type="pioneer_teleop_key" name="pioneer_teleop_key" />
+        -->
+
+        <!--OPEN RVIZ PioneerRvizConfig.rviz-->
+        <node pkg="rviz" type="rviz" name="rviz" args="-d $(find cpe631_final_with_nav)/src/NavigationConfig.rviz" if="$(arg use_my_transform)"/>
+    </group>
+
+</launch>

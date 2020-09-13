@@ -1,0 +1,40 @@
+<launch>
+    <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+    <arg name="ped" default="true"/>
+    <arg name="x_pos" default="1.0"/>
+    <arg name="y_pos" default="-3.0"/>
+    <arg name="z_pos" default="0.0"/>
+
+    <!--RUN SIMULATION NODES
+    <include file="$(find turtlebot3_fake)/launch/turtlebot3_fake.launch">
+    </include>
+-->
+
+    <!--Pedestrian motions and the converter to convert /gazebo/model_states to /people-->
+    <node name="pedsim_simulator" pkg="pedsim_simulator" type="pedsim_simulator" output="screen" if="$(arg ped)">
+        <!-- 0 - headless, 1 - minimal, 2 - full -->
+        <param name="visual_mode" value="2" type="int"/>
+        <param name="scene_file" value="$(find pedsim_simulator)scenarios/altorfer.xml" type="string"/>
+        <param name="default_queue_size" value="10"/>
+        <!-- param name="max_robot_speed" value="1.5" type="double"/-->
+        <param name="robot_mode" value="1" type="int"/>
+        <param name="enable_groups" value="false" type="bool"/>
+    </node>
+<!--     <node pkg="cpe631_final_with_nav" type="pedestrian_streamer" name="pedestrian_streamer"/> -->
+
+    <!--STARTS GAZEBO WITH THE CPE631 FINAL WORLD-->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find pedsim_simulator)/worlds/altorfer_v2_ped.world" if="$(arg ped)"/>
+        <arg name="world_name" value="$(find pedsim_simulator)/worlds/altorfer_v2_turtlebot.world" unless="$(arg ped)"/>
+        <arg name="paused" value="false"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="gui" value="true"/>
+        <arg name="headless" value="false"/>
+        <arg name="debug" value="false"/>
+    </include>
+
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+    <!--Spawns in robot-->
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model turtlebot3_$(arg model) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
+
+</launch>

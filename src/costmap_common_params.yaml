@@ -1,0 +1,22 @@
+transform_tolerance:        0.5
+
+obstacle_range:             2.5
+raytrace_range:             3.0
+
+#obstacle_range:             2.5
+#raytrace_range:             3.0
+
+footprint:                  [ [0.27, 0.23], [0.27, -0.23], [-0.27, -0.23], [-0.27, 0.23]]
+inflation_radius:           1.75
+cost_scaling_factor:        2.10
+#resolution:                 Can change from global to local. Obviously, make local greater unless you have enough comp pwr then both can be same
+
+observation_sources:        laser_scan
+
+laser_scan: {
+    topic:                  /scan,
+    sensor_frame:           base_scan,
+    data_type:              LaserScan,
+    marking:                true,
+    clearing:               true
+}
