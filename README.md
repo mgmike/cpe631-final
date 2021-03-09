@@ -15,29 +15,33 @@ As seen in the package.xml, the following are needed:
     tf
 
 
-/////Installation/////
+# Installation
 
 
 The following will need to be installed manually. 
 
 gmapping:
+
 sudo apt install ros-melodic-gmapping
 
 pedsim:
+
 cd ~/catkin_ws/src
 git clone --recurse-submodules https://github.com/ral-stevens/CPE631Final.git
 cd ~/catkin_ws
 
 people_msgs:
+
 sudo apt install ros-melodic-people-msgs
 
 catkin_make
 
 
-/////Pioneer3AT
+## Pioneer3AT
 To run the Pioneer3AT robot that runs into the wall, four terminals are needed:
 
 With the first one, run 
+
 $roslaunch cpe631-final gmappingLnch.launch
 
 This launch file launches the following nodes:
@@ -48,6 +52,7 @@ This launch file launches the following nodes:
     Gazebo
 	
 With the second one, run
+
 $roslaunch cpe631-final move_base.launch
 
 This launch file launches the following nodes:
@@ -64,7 +69,7 @@ $rostopic pub /move_base_simple/goal geometry_msgs/PoseStamped '{header: {stamp:
 This command publishes a goal topic.
 
 
-
+## Turtlebot3 no pedestrians
 To run the Turtlebot3 Waffle with no pedestrians and using the usual navigation stack, three terminals are needed:
 
 With the first one, run 
@@ -90,10 +95,8 @@ With the third one, run
 $rostopic pub /move_base_simple/goal geometry_msgs/PoseStamped '{header: {stamp: now, frame_id: "map"}, pose: {position: {x: 14.0, y: -1.0, z: 0.0}, orientation: {w: 1.0}}}'
 
 
-
+## Turtlebot3 with pedestrians
 To run the Turtlebot3 Waffle with pedestrians, simply run the previous 3 commands but omit the “ped:=false” argument from the first command. 
-
-
 
 To run the Turtlebot3 Waffle with the Human Aware Navigation stack instead of the typical Navigation stack remove the “han:=false” argument from the second command. In addition add the command:
 $rosrun cpe631-final pedestrian_streamer output:=screen
