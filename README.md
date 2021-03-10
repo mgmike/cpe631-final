@@ -129,9 +129,12 @@ A robot is a tool that can be utilized to complete a task that a human would eit
 ## 1 Introduction
 
 Assumptions:
-	The robot is given a map to localize from
-	The robot is given an initial position and a goal position
-	Pedestrian locations are always known
+
+The robot is given a map to localize from
+	
+The robot is given an initial position and a goal position
+	
+Pedestrian locations are always known
 	
 	
 ### 1.1 Map creation
@@ -193,17 +196,17 @@ rostopic pub /move_base_simple/goal geometry_msgs/PoseStamped '{header: {stamp: 
 Using rviz or ros visualization, the resulting path shown in figure 5 was inadequate as it did not leave enough room for the robot to clear the wall. The global and local planners include variables that can be altered to improve results for different environments. To keep the robot farther away from walls and in the middle of hallways and doorways, the cost_factor was increased to 0.55 from 0.25. The resulting path was more preferable as it stayed in the middle of doorways and hallways as seen in figure 6. It was at this point when it was noted that the Pioneer3AT was unable to turn due to its wheels spinning in different directions as seen in Figure 7.
 
 
-![Figure 5: Low cost_factor results in a path with minimal length, but hugs walls](images/figure5)
+![Figure 5: Low cost_factor results in a path with minimal length, but hugs walls](images/figure5.png)
 
 Figure 5: Low cost_factor results in a path with minimal length, but hugs walls
 
 
-![Figure 6: Increasing the cost_factor, centralizes robot](images/figure6)
+![Figure 6: Increasing the cost_factor, centralizes robot](images/figure6.gif)
 
 Figure 6: Increasing the cost_factor, centralizes robot
 
 
-![Figure 7](images/figure7)
+![Figure 7](images/figure7.gif)
 
 Figure 7: Pioneer3AT wheels counteract rotation. In attempting a left turn, the robot should spin all wheels clockwise. It can be seen that the left front and right back wheels are spinning cw, however the left back and right front wheels are spinning ccw.
 
@@ -216,12 +219,12 @@ The next step in the saga is to replace the Pioneer3AT robot with a differential
 Depicted in Figure 8, the turtlebot is able to rotate fast enough to follow the path and makes it to the goal. Now that the robot has proven itself worthy, pedestrians can now be added back into the simulation. Using the standard planners in the move_base navigation stack, the turtlebot has a tough time getting to the goal without being kicked by the pedestrians as seen in Figure 9. The standard planners do not take moving objects into account. In this short demo, it can be seen that the local planner will add past pedestrian locations to the global costmap in the form of light blue pixels. Many of these false objects are removed after some time due to the fact that the refresh is not frequent. This is actually good because for an environment where there are no moving objects, if the scanner reads an incorrect distance, it will be able to compensate by waiting to compare it to the next reading from that location. In other words, the objects in the global cost_map are averages of past samples, so the more samples that are taken, the less outliers there are.
 
 
-![Figure 8: Turtlebot3 Waffle navigates to the goal](images/figure8)
+![Figure 8: Turtlebot3 Waffle navigates to the goal](images/figure8.gif)
 
 Figure 8: Turtlebot3 Waffle navigates to the goal
 
 
-![Figure 9: Turtlebot3 Waffle navigates to the goal with pedestrians and proceeds to get kicked around. The gif is played at 5X speed](images/figure9)
+![Figure 9: Turtlebot3 Waffle navigates to the goal with pedestrians and proceeds to get kicked around. The gif is played at 5X speed](images/figure9.gif)
 
 Figure 9: Turtlebot3 Waffle navigates to the goal with pedestrians and proceeds to get kicked around. The gif is played at 5X speed
 
@@ -234,7 +237,7 @@ To enable the Human Aware Navigation algorithm to be able to account for the sim
 Unfortunately, I was unable to integrate the Human Aware Navigation stack. There are a few algorithms which this stack uses that I am unfamiliar with. With maybe a day or two worth of more research, it is entirely possible to fully integrate this stack into the navigation. In figure 10, the current final result can be seen.
 
 
-![Figure 10](images/figure10)
+![Figure 10](images/figure10.gif)
 
 Figure 10: The robot is unable to move, most likely because a node is implemented incorrectly. Every few seconds, the pedestrian’s 3D costmaps are updated, but there is only one prediction.
 
@@ -250,7 +253,8 @@ Typically, the robot will be able to detect pedestrians by sending its sensor da
 All in all, I have learned that there are open source algorithms for everything, it just takes some deep searching to find them. It is also very useful to abstract as much as possible so other packages can build off of each other and protocols can be created.
 
 
-Citations
+## Citations
+
 ![Slam gmapping](http://wiki.ros.org/slam_gmapping/Tutorials/MappingFromLoggedData)
 
 ![Slam gmapping wrapper](http://wiki.ros.org/gmapping?distro=kinetic)
@@ -296,10 +300,14 @@ Citations
 ![People_msgs::people docs](http://docs.ros.org/api/people_msgs/html/msg/People.html)
 
 
-External ros packages
+### External ros packages
+
 Ros-kinetic-move-base
+
 Ros-kinetic-amcl
+
 Ros-kinetic-map-server
+
 Ros-kinetic-navigation
 
 
